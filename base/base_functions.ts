@@ -53,7 +53,7 @@ export class BaseFunctions {
      */
     async get_item_attribute(locator: () => Locator, index: number = 0, attributeName: string): Promise<string | null> {
         try {
-            await locator().nth(index).waitFor({ state: 'visible' });
+            await locator().nth(index).waitFor();
             return await locator().nth(index).getAttribute(attributeName);
         } catch (error) {
             console.error(`Failed to get attribute: ${error}`);
@@ -108,17 +108,6 @@ async get_product_name_without_brand(productTitleLocator: () => Locator, brandLo
  * @param {() => Locator} locator - A function to locate the element containing the price.
  * @return {Promise<number>} Promise that resolves with the product price as a number.
  */
-// ESKI
-// async get_product_price(locator: () => Locator): Promise<number> {
-//     try {
-//     const price = await this.get_item_text(locator)
-//     const product_price = parseFloat(price)
-//     return product_price
-//     } catch (error) {
-//         console.error(`Failed to get product price: ${error}`);
-//         throw error;
-//     }
-// }
 
 async get_product_price(locator: () => Locator): Promise<number> {
     try {

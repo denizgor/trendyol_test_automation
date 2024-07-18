@@ -1,13 +1,13 @@
 import { test, expect } from "@playwright/test"
 import HomePage from "../pages/HomePage.ts"
 import { ProductPage } from "../pages/ProductPage.ts"
-import exp from "constants"
-import { CartPage } from "../pages/CartPage.ts"
+
 
 test("trendyol add product journey", async ({ page }) => {
     const homePage = new HomePage(page)
 
     const search_term = "tshirt"
+    const product_index = 3
 
 
     await page.goto("https://www.trendyol.com/")
@@ -19,13 +19,13 @@ test("trendyol add product journey", async ({ page }) => {
 
     expect(searchResultsPage.page.url()).toContain(`/sr?q=${search_term}`)
     expect(await searchResultsPage.get_search_result_title()).toEqual(search_term)
-    const searched_product_name = await searchResultsPage.get_product_attribute_title()
+    const searched_product_name = await searchResultsPage.get_product_attribute_title(product_index)
 
 
     // Open clicked product in a new tab
     const [newTab] = await Promise.all([
         page.context().waitForEvent('page'),
-        searchResultsPage.click_chosen_element()
+        searchResultsPage.click_chosen_element(product_index)
     ]);
 
     await newTab.bringToFront()
@@ -36,9 +36,11 @@ test("trendyol add product journey", async ({ page }) => {
 
     expect(searched_product_name).toEqual(selected_product_name)
 
+    //await page.waitForTimeout(1000)
+    await productPage.page.reload()
     await productPage.select_product_size()
     await productPage.click_add_to_cart_btn()
-    await page.waitForTimeout(1000)
+    await page.waitForTimeout(1500)
 
     expect(productPage.CART_COUNTER()).toBeVisible()
     expect(await productPage.get_cart_count()).toBeGreaterThan(0)

@@ -8,7 +8,7 @@ export class ProductPage extends BaseFunctions {
     }
 
     PRODUCT_TITLE = () => this.page.locator("h1.pr-new-br span:last-child").nth(0)
-    PRODUCT_SIZE = () => this.page.locator(".selected.sp-itm").getByText('S')
+    PRODUCT_SIZE = () => this.page.locator(".sp-itm").getByText('S', { exact: true })
     PRODUCT_PRICE = () => this.page.locator(".prc-dsc").nth(0)
     CART_COUNTER = () => this.page.locator(".basket-item-count-container")
     ADD_TO_CART_BTN = () => this.page.getByText("Sepete Ekle")
